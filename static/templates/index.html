@@ -1,0 +1,53 @@
+
+	{% extends "base.html" %}
+
+	{% load django_bootstrap_breadcrumbs %}
+
+	{% block breadcrumbs %}
+	    {{ block.super }}
+	    {% breadcrumb "Users and 1" "users_and_groups_1" %}
+	{% endblock %}
+
+
+
+	{% block content %}
+	<div class="jumbotron">
+	      <h3> ข่าวสาร </h3>
+	</div>
+
+
+
+	{% for news_entry in news %}
+	{# Each "news_entry" is a Contact model object. #}
+	 <div class="news_card" >
+
+			<div class="img_title">
+				<img src="{{ MEDIA_URL }}{{ news_entry.newsimage }}"  />
+			</div>
+
+	      	<div class="description_title">
+		      	<h2>{{ news_entry.title }}</h2>
+				<h4>{{ news_entry.stitle }} - <a href="{% url 'news:detailnews' news_entry.category news_entry.title %}">อ่านต่อ</a></h4>
+	      	</div>
+			
+	      </div>
+	{% endfor %}
+
+	<div class="pagination">
+	    <span class="step-links">
+	        {% if news.has_previous %}
+	            <a href="?page={{ news.previous_page_number }}">previous</a>
+	        {% endif %}
+
+	        <span class="current">
+	            Page {{ news.number }} of {{ news.paginator.num_pages }}.
+	        </span>
+
+	        {% if news.has_next %}
+	            <a href="?page={{ news.next_page_number }}">next</a>
+	        {% endif %}
+	    </span>
+	</div>
+
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br/>
+    {% if form.is_multipart %}
+    <form enctype="multipart/form-data" method="post" action="{% url 'news:reportnews'  %}">
+    {% else %}
+        <form method="post" action="{% url 'news:reportnews'  %}">
+    {% endif %}
+
+    {% csrf_token %}
+
+    <!--
+    <h2 class="form-signin-heading">รายงานข่าว</h2>
+    <input type="text" class="form-control" placeholder="หัวข้อข่าว" name="title" maxlength="75" required autofocus><br/>
+    <input type="text" class="form-control" placeholder="คำโปรย" name="stitle" maxlength="150"required><br/>
+    <textarea class="form-control" placeholder="เนื้อหาข่าว" name="description" maxlength="1000"required></textarea>
+    <h5>รูปภาพประกอบข่าว :</h5><input type="file" class="form-control" name="image"><br/>
+	
+	<br/>
+    <button class="btn btn-lg btn-primary btn-block"  type="submit">รายงาน</button><br/>
+
+
+    -->
+
+    {{ form}}
+    <br/>
+    <button class="btn btn-lg btn-primary btn-block"  type="submit">รายงาน</button><br/>
+    {% if error_message %}<p style="color:red"><strong>{{ error_message }}</strong></p>{% endif %}
+  </form>
+{% endblock %}

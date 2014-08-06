@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br>
+{% if form.is_multipart %}
+    <form enctype="multipart/form-data" method="post" action="#">
+    {% else %}
+    <form method="post" action="#">
+    {% endif %}
+  {% csrf_token %}
+  
+  {{ form }}
+  <br/>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+  <br>{% if error_message %}<p style="color:red"><strong>{{ error_message }}</strong></p>{% endif %}
+</form>
+{% endblock %}

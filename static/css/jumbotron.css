@@ -1,0 +1,33 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.news_card{
+	border:1px dotted black;
+	margin-bottom: 5px;
+}
+
+
+.img_title{
+	display: inline-block;
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 120px;
+}
+.img_title img{ 
+	width: 100px;
+	display: table-cell;
+}
+.description_title {
+	width: 80%;
+	padding-left: 10px;
+	word-wrap:break-word;
+	display: inline-block;
+}
+.detail_news {
+	width: 80%;
+	padding-left: 10px;
+	word-wrap:break-word;
+}

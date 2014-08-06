@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 from django.shortcuts import get_object_or_404,render, redirect
 from django.shortcuts import render_to_response, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.template import RequestContext, loader
 from django.core.urlresolvers import reverse
 from django.views import generic
@@ -28,10 +28,13 @@ def IndexView(request):
 
 	return render(request, 'index.html', {"news": news})
 
+
+
 def categoryView(request, category):
 	news_category = NewsCategory.objects.get(category_name=category)
 	news_list = NewsPublish.objects.filter(category=news_category).order_by('-pub_date')
 	return render(request, 'category.html', {"news": news_list , "category" : news_category, })
+
 
 
 def LoginView(request):
@@ -58,9 +61,11 @@ def LoginView(request):
 	form = UserloginForm()
 	return render(request, 'login.html', RequestContext(request, {'form' : form}))
 
+
 def logoutView(request):
 	logout(request)
 	return redirect(('news:index'))
+
 
 @login_required
 def reportnewsView(request):
@@ -90,17 +95,44 @@ class AddNewsForm(forms.Form):
     image = forms.ImageField(label=u'รูปภาพประกอบข่าว', widget=forms.FileInput(attrs={'class': 'form-control'}))
     category = forms.ModelChoiceField(label=u'ประเภทข่าว',queryset=NewsCategory.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
 
+
 class UserloginForm(forms.Form):
     username = forms.CharField(label=u'ผู้ใช้', widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(label=u'รหัสผ่าน', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 
-	
-def detailView(request, category, news_title):
+def detailView(request, category, news_id, news_title):
 	try:
-	    news = NewsPublish.objects.get(title=news_title)
+	    news = NewsPublish.objects.get(pk=news_id)
 	except NewsPublish.DoesNotExist:
 	    raise Http404
 	return render(request, 'detail.html', {'news': news})
 
 
+@login_required
+def editView(request, category, news_id, news_title):
+	news_publish = NewsPublish.objects.get(pk=news_id)
+	if request.method == 'POST':
+	    form = AddNewsForm(request.POST, request.FILES)
+	    if form.is_valid():
+	        news_publish.title = form.cleaned_data['title']
+	        news_publish.stitle = form.cleaned_data['stitle']
+	        news_publish.description = form.cleaned_data['description']
+	        news_publish.newsimage = form.cleaned_data['image']
+	        news_publish.category = form.cleaned_data['category']
+	        news_publish.save()
+		return redirect('news:detailnews', category,  news_id, news_publish.title)
+	else :
+		form = AddNewsForm(initial={
+			'title': news_publish.title,
+			'stitle' : news_publish.stitle,
+			'description' : news_publish.description,
+			'category' : news_publish.category,
+			})
+	return render(request, 'editnews.html', {'form': form, 'news' : news_publish })
+
+@login_required
+def deleteView(request, category, news_id, news_title):
+	if request.method == 'POST':
+		news = NewsPublish.objects.get(pk=news_id).delete()
+		return redirect('news:index')

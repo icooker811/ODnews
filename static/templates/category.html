@@ -20,7 +20,7 @@
 
     <div class="description_title">
         <h2>{{ news_entry.title }}</h2>
-        <h4>{{ news_entry.stitle }} - <a href="{% url 'news:detailnews' news_entry.category news_entry.title %}">อ่านต่อ</a></h4>
+        <h4>{{ news_entry.stitle }} - <a href="{% url 'news:detailnews' news_entry.category news_entry.id  news_entry.title %}">อ่านต่อ</a></h4>
     </div>
 
 </div>

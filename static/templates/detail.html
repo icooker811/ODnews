@@ -4,7 +4,7 @@
     {{ block.super }}
     {% load breadcrumb_tags %}
     {% add_crumb news.category.category_name 'news:categorynews' news.category  %}
-    {% add_crumb news.title 'news:detailnews' news.category news.title %}
+    {% add_crumb news.title 'news:detailnews' news.category news.id news.title %}
 {% endblock %}
 
 
@@ -16,9 +16,19 @@
     <img src="{{ MEDIA_URL }}/{{ news.newsimage }}" width="300"/>
     <p></p>
     <p>{{ news.description }}</p>
-    <p>รายงานโดย {{ news.reporter.first_name }} {{ news.reporter.last_name }} * {{ news.pub_date }}</p>
-    <p><a href="#">แก้ไขข่าว</a> / <a href="#">ลบข่าว</a><p>
+    <p>รายงานโดย {{ news.reporter.first_name }} {{ news.reporter.last_name }} * {{ news.pub_date|date:"D d F Y " }} {{ news.pub_date|time:"H:i:s" }} </p>
+     
+    {% if user.is_authenticated %}
+
+    <p><a href="{% url 'news:editnews' news.category news.id  news.title %}">แก้ไขข่าว</a> | <a href="#" onclick="if(confirm('ต้องการลบข่าวนี้ ?')) document.getElementById('deletefrm').submit(); else return false;">ลบข่าว</a><p>
     <p><p>
+
+     {% endif %}
+
+    <form id="deletefrm" method="post" action="{% url 'news:deletenews'  news.category news.id news.title %}">
+    {% csrf_token %}
+        <input type="hidden" value="{{ news.title }}" / >
+    </form>
 
 </div>
 {% endblock %}

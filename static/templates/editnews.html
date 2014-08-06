@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb news.category.category_name 'news:categorynews' news.category  %}
+    {% add_crumb news.title 'news:detailnews' news.category news.id  news.title %}
+    {% add_crumb 'แก้ไขข่าว' 'news:editnews' news.category news.id news.title  %}
+{% endblock %}
+
+{% block content %}
+<br/>
+    {% if form.is_multipart %}
+    <form enctype="multipart/form-data" method="post" action="#">
+    {% else %}
+        <form method="post" action="#">
+    {% endif %}
+
+    {% csrf_token %}
+    {{ form }}
+    <br/>
+    <button class="btn btn-lg btn-primary btn-block"  type="submit">แก้ไขข่าว</button><br/>
+    {% if error_message %}<p style="color:red"><strong>{{ error_message }}</strong></p>{% endif %}
+  </form>
+{% endblock %}

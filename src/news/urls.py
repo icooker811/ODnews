@@ -7,8 +7,10 @@ urlpatterns = patterns('news.views',
     url(r'^login/$', 'LoginView', name='login'),
     url(r'^logout/$', 'logoutView', name='logout'),
     url(r'^reportnews/$', 'reportnewsView', name='reportnews'),
+    url(r'^(?P<category>\w+)/(?P<news_id>\d+)/(?P<news_title>[\w|\W]+)/edit/$', 'editView', name='editnews'),
+    url(r'^(?P<category>\w+)/(?P<news_id>\d+)/(?P<news_title>[\w|\W]+)/delete/$', 'deleteView', name='deletenews'),
+    url(r'^(?P<category>\w+)/(?P<news_id>\d+)/(?P<news_title>[\w|\W]+)/$', 'detailView', name='detailnews'),
     url(r'^(?P<category>\w+)/$', 'categoryView', name='categorynews'),
-    url(r'^(?P<category>\w+)/(?P<news_title>[\w|\W]+)/$', 'detailView', name='detailnews'),
     
 )
 

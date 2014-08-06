@@ -28,6 +28,11 @@ def IndexView(request):
 
 	return render(request, 'index.html', {"news": news})
 
+def categoryView(request, category):
+	news_category = NewsCategory.objects.get(category_name=category)
+	news_list = NewsPublish.objects.filter(category=news_category).order_by('-pub_date')
+	return render(request, 'category.html', {"news": news_list})
+
 
 def LoginView(request):
 	if request.method == 'POST':

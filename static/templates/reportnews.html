@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb 'รายงานข่าว' 'news:reportnews' %}
+{% endblock %}
+
 {% block content %}
 <br/>
     {% if form.is_multipart %}

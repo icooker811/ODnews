@@ -31,7 +31,7 @@ def IndexView(request):
 def categoryView(request, category):
 	news_category = NewsCategory.objects.get(category_name=category)
 	news_list = NewsPublish.objects.filter(category=news_category).order_by('-pub_date')
-	return render(request, 'category.html', {"news": news_list})
+	return render(request, 'category.html', {"news": news_list , "category" : news_category, })
 
 
 def LoginView(request):

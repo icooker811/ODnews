@@ -1,14 +1,15 @@
 
 {% extends "base.html" %}
 
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb category.category_name 'news:categorynews' category  %}
+{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-  <h3> ข่าวสาร </h3> 
-</div>
 
-
-
+<p><p>
 {% for news_entry in news %}
 {# Each "news_entry" is a Contact model object. #}
 <div class="news_card" >

@@ -71,19 +71,21 @@
     
 
     <div class="container">
-      
+      <p><p>
+<div id="breadcrumbs">
+    {% block breadcrumb %}
+        {% load breadcrumb_tags %}
+        {% add_crumb 'Home' 'news:index' %}
+    {% endblock %}
+    {% render_breadcrumbs %}
+</div>
 
-      {% load django_bootstrap_breadcrumbs %}
+{% block content %}
 
-      {% block breadcrumbs %}
-          {% clear_breadcrumbs %}
-          {% breadcrumb "Home" "/" %}
-          {% breadcrumb "Users and groups" "users_and_groups_index" %}
-      {% endblock %}
-    
-      {% block content %}
-          {% render_breadcrumbs static 'breadcrumbs_template.html' %}
-      {% endblock %}
+
+{% endblock %}
+
+
       <hr>
 
       <footer>

@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block breadcrumb %}
+    {{ block.super }}
+    {% load breadcrumb_tags %}
+    {% add_crumb news.category.category_name 'news:categorynews' news.category  %}
+    {% add_crumb news.title 'news:detailnews' news.category news.title %}
+{% endblock %}
+
+
 {% block content %}
 
 <div class="detail_news">	
@@ -9,5 +17,8 @@
     <p></p>
     <p>{{ news.description }}</p>
     <p>รายงานโดย {{ news.reporter.first_name }} {{ news.reporter.last_name }} * {{ news.pub_date }}</p>
+    <p><a href="#">แก้ไขข่าว</a> / <a href="#">ลบข่าว</a><p>
+    <p><p>
+
 </div>
 {% endblock %}

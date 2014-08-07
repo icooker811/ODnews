@@ -14,7 +14,7 @@ from django import forms
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
 def IndexView(request):
 	news_list = NewsPublish.objects.order_by('-pub_date')
 	paginator = Paginator(news_list, 5) 
@@ -33,7 +33,15 @@ def IndexView(request):
 def categoryView(request, category):
 	news_category = NewsCategory.objects.get(category_name=category)
 	news_list = NewsPublish.objects.filter(category=news_category).order_by('-pub_date')
-	return render(request, 'category.html', {"news": news_list , "category" : news_category, })
+	paginator = Paginator(news_list, 20) 
+	page = request.GET.get('page')
+	try:
+	    news = paginator.page(page)
+	except PageNotAnInteger:
+	    news = paginator.page(1)
+	except EmptyPage:
+	    news = paginator.page(paginator.num_pages)
+	return render(request, 'category.html', {"news": news , "category" : news_category, })
 
 
 
@@ -76,7 +84,8 @@ def reportnewsView(request):
 	        news_publish.title = form.cleaned_data['title']
 	        news_publish.stitle = form.cleaned_data['stitle']
 	        news_publish.description = form.cleaned_data['description']
-	        news_publish.newsimage = form.cleaned_data['image']
+	        if form.cleaned_data['image'] != None:
+				news_publish.newsimage = form.cleaned_data['image']
 	        news_publish.category = form.cleaned_data['category']
 	        news_publish.pub_date = timezone.now();
 	        news_publish.reporter = request.user
@@ -92,7 +101,7 @@ class AddNewsForm(forms.Form):
     title = forms.CharField(label=u'หัวข้อ', max_length=75 , widget=forms.TextInput(attrs={'class': 'form-control'}))
     stitle = forms.CharField(label=u'คำโปรย', max_length=150 , widget=forms.TextInput(attrs={'class': 'form-control'}))
     description = forms.CharField(label=u'เนื้อหาข่าว', max_length=1000, widget=forms.Textarea(attrs={'class': 'form-control'}))
-    image = forms.ImageField(label=u'รูปภาพประกอบข่าว', widget=forms.FileInput(attrs={'class': 'form-control'}))
+    image = forms.ImageField(label=u'รูปภาพประกอบข่าว',required=False, widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
     category = forms.ModelChoiceField(label=u'ประเภทข่าว',queryset=NewsCategory.objects.all(), widget=forms.Select(attrs={'class': 'form-control'}))
 
 
@@ -113,15 +122,16 @@ def detailView(request, category, news_id, news_title):
 def editView(request, category, news_id, news_title):
 	news_publish = NewsPublish.objects.get(pk=news_id)
 	if request.method == 'POST':
-	    form = AddNewsForm(request.POST, request.FILES)
-	    if form.is_valid():
-	        news_publish.title = form.cleaned_data['title']
-	        news_publish.stitle = form.cleaned_data['stitle']
-	        news_publish.description = form.cleaned_data['description']
-	        news_publish.newsimage = form.cleaned_data['image']
-	        news_publish.category = form.cleaned_data['category']
-	        news_publish.save()
-		return redirect('news:detailnews', category,  news_id, news_publish.title)
+		form = AddNewsForm(request.POST, request.FILES)
+		if form.is_valid():
+		    news_publish.title = form.cleaned_data['title']
+		    news_publish.stitle = form.cleaned_data['stitle']
+		    news_publish.description = form.cleaned_data['description']
+		    if form.cleaned_data['image'] != None:
+		    	news_publish.newsimage = form.cleaned_data['image']
+		    news_publish.category = form.cleaned_data['category']
+		    news_publish.save()
+		    return redirect('news:detailnews', category,  news_id, news_publish.title)
 	else :
 		form = AddNewsForm(initial={
 			'title': news_publish.title,

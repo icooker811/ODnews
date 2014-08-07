@@ -48,12 +48,11 @@
 
           {% if user.is_authenticated %}
           <div class="navbar-right" >
-            <ul class="nav navbar-nav">
-              <li>
-                <form class="navbar-form" role="form" action="{% url 'news:reportnews' %}">
+            <form class="navbar-form" role="form" action="{% url 'news:reportnews' %}">
                   <button type="submit" class="btn btn-success">รายงานข่าว</button>
-                </form>
-              </li>
+            </form>
+            <ul class="nav navbar-nav">
+                
               <li><a >{{ user.first_name }} {{ user.last_name }}</a></li>
               <li><a href="{% url 'news:logout' %}">logout</a></li>
             </ul>

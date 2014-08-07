@@ -16,7 +16,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'css/jumbotron.css' %}" rel="stylesheet">
-
+    <link href="{% static 'css/pager.css' %}" rel="stylesheet">
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <!--<script src="../../assets/js/ie-emulation-modes-warning.js"></script> -->
@@ -48,11 +48,12 @@
 
           {% if user.is_authenticated %}
           <div class="navbar-right" >
-            <form class="navbar-form" role="form" action="{% url 'news:reportnews' %}">
-                  <button type="submit" class="btn btn-success">รายงานข่าว</button>
-            </form>
             <ul class="nav navbar-nav">
-                
+              <li>
+                <form class="navbar-form" role="form" action="{% url 'news:reportnews' %}">
+                  <button type="submit" class="btn btn-success">รายงานข่าว</button>
+                </form>
+              </li>
               <li><a >{{ user.first_name }} {{ user.last_name }}</a></li>
               <li><a href="{% url 'news:logout' %}">logout</a></li>
             </ul>

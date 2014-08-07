@@ -17,6 +17,7 @@ body {
 }
 .img_title img{ 
 	width: 100px;
+	height: 70px;
 	display: table-cell;
 }
 .description_title {

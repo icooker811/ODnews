@@ -2,45 +2,58 @@
 {% extends "base.html" %}
 
 {% block breadcrumb %}
-    {{ block.super }}
-    {% load breadcrumb_tags %}
-    {% add_crumb category.category_name 'news:categorynews' category  %}
+{{ block.super }}
+{% load breadcrumb_tags %}
+{% add_crumb category.category_name 'news:categorynews' category  %}
 {% endblock %}
 
 {% block content %}
 
 <p><p>
-{% for news_entry in news %}
-{# Each "news_entry" is a Contact model object. #}
-<div class="news_card" >
+    {% for news_entry in news %}
+    {# Each "news_entry" is a Contact model object. #}
+    <div class="news_card" >
 
-    <div class="img_title">
-        <img src="{{ MEDIA_URL }}{{ news_entry.newsimage }}"  />
+        <div class="img_title">
+            <img src="{{ MEDIA_URL }}{{ news_entry.newsimage }}"  />
+        </div>
+
+        <div class="description_title">
+            <h3>{{ news_entry.title }}</h3>
+            <h5>{{ news_entry.stitle }} - <a href="{% url 'news:detailnews' news_entry.category news_entry.id  news_entry.title %}">อ่านต่อ</a></h5>
+        </div>
+
     </div>
+    {% endfor %}
 
-    <div class="description_title">
-        <h2>{{ news_entry.title }}</h2>
-        <h4>{{ news_entry.stitle }} - <a href="{% url 'news:detailnews' news_entry.category news_entry.id  news_entry.title %}">อ่านต่อ</a></h4>
-    </div>
-
-</div>
-{% endfor %}
-
-{% if news.paginator.num_pages  > 1 %}
-<div class="pagination">
+    {% if news.paginator.num_pages  > 1 %}
+    <div class="pagination">
         <span class="step-links">
-            {% if news.has_previous %}
-                <a href="?page={{ news.previous_page_number }}">previous</a>
+            {% if news.number > 1 %}
+            <a class="page" href="?page={{ 1 }}">first</a>
             {% endif %}
+
+
+            {% if news.has_previous %}
+            <a class="page" href="?page={{ news.previous_page_number }}"> {{ news.number|add:-1 }} </a>
+            {% endif %}
+
 
             <span class="current">
-                Page {{ news.number }} of {{ news.paginator.num_pages }}.
+                <a class="page active" href="?page={{ news.number }}"> {{ news.number }} </a>
             </span>
 
+
             {% if news.has_next %}
-                <a href="?page={{ news.next_page_number }}">next</a>
+            <a class="page" href="?page={{ news.next_page_number }}"> {{ news.number|add:1 }} </a>
             {% endif %}
+
+
+            {% if news.number < news.paginator.num_pages %}
+            <a class="page"  href="?page={{ news.paginator.num_pages }}"> last </a>
+            {% endif %}
+
         </span>
     </div>
-{% endif %}
-{% endblock %}
+    {% endif %}
+    {% endblock %}

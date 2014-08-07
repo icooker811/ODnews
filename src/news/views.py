@@ -146,3 +146,4 @@ def deleteView(request, category, news_id, news_title):
 	if request.method == 'POST':
 		news = NewsPublish.objects.get(pk=news_id).delete()
 		return redirect('news:index')
+

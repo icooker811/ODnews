@@ -55,11 +55,11 @@
                 </form>
               </li>
               <li><a >{{ user.first_name }} {{ user.last_name }}</a></li>
-              <li><a href="{% url 'news:logout' %}">logout</a></li>
+              <li><a href="{% url 'accounts:logout' %}">logout</a></li>
             </ul>
           </div>
           {% else %}
-          <form class="navbar-form navbar-right" role="form" action="{% url 'news:login' %}">
+          <form class="navbar-form navbar-right" role="form" action="{% url 'accounts:login' %}">
             <button type="submit" class="btn btn-success">Sign in</button>
           </form>
           {% endif %}

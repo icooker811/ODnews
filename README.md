@@ -1,4 +1,7 @@
 1st Assignment News Web Application based on Django
+========
+
+
 1. Feed news
 2. Category news
 3. View news
